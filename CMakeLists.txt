@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(test_pw VERSION 0.1.0 LANGUAGES CXX C ASM)
+
+set(CMAKE_EXECUTABLE_SUFFIX ".elf")
+set(CPACK_PACKAGE_CHECKSUM MD5)
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
+
+include(FetchContent)
+include(CPack)
+include(Cmake/Opts/Custom_build_opts.cmake)
+include(Cmake/Utils/pre-commit.cmake)
+include(Cmake/Utils/change_log.cmake)
+include(Cmake/Utils/app_conf.cmake)
+
+add_subdirectory(Chip)
+add_subdirectory(Lib)
+add_subdirectory(Services)
+add_subdirectory(App)
+
+target_install_binary(${PROJECT_NAME})

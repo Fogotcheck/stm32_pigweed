@@ -1,0 +1,7 @@
+build/**
+.vscode/**
+
+Chip/STM32H743XX/.cproject
+Chip/STM32H743XX/.mxproject
+Chip/STM32H743XX/.project
+Chip/STM32H743XX/.settings/**

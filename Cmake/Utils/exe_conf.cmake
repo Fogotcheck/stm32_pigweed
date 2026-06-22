@@ -1,0 +1,66 @@
+cmake_minimum_required(VERSION 3.22)
+
+set(CONFIG_OUT_FILE_NAME "/config.json")
+set(TEMP_OUT_FILE_NAME "/temp.bin")
+
+execute_process(
+    COMMAND git rev-parse HEAD
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE CONFIG_GIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+string(TIMESTAMP YEAR "%y")
+string(TIMESTAMP MONTH "%m")
+string(TIMESTAMP DAY "%d")
+string(TIMESTAMP HOUR "%H")
+
+math(EXPR CONFIG_DATE "((${YEAR} << 24) | (${MONTH} << 16) | (${DAY}<< 8) | ${HOUR})")
+math(EXPR CONFIG_DATE "${CONFIG_DATE} + 0" OUTPUT_FORMAT HEXADECIMAL)
+
+set(TEMP_FILE_BIN "${CONFIG_OUT_PATH}${TEMP_OUT_FILE_NAME}")
+execute_process(
+    COMMAND ${CMAKE_OBJCOPY} -O binary ${TARGET_PATH} ${TEMP_FILE_BIN}
+)
+
+execute_process(
+    COMMAND python ${SCRIPT_CALC_CRC} ${TEMP_FILE_BIN}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE CONFIG_APP_CRC
+)
+
+file(SIZE ${TEMP_FILE_BIN} CONFIG_APP_SIZE)
+math(EXPR CONFIG_APP_SIZE "${CONFIG_APP_SIZE} + 0" OUTPUT_FORMAT HEXADECIMAL)
+set(TARGET_FILE "${CONFIG_OUT_PATH}${CONFIG_OUT_FILE_NAME}")
+
+# Debug
+# message(STATUS TARGET_PATH:: ${TARGET_PATH})
+# message(STATUS CONFIG_START_ADDRESS:: ${CONFIG_START_ADDRESS})
+# message(STATUS CONFIG_APP_ADDRESS:: ${CONFIG_APP_ADDRESS})
+# message(STATUS CONFIG_PATH:: ${CONFIG_PATH})
+# message(STATUS CONFIG_DATE:: ${CONFIG_DATE})
+# message(STATUS CONFIG_VERSION:: ${CONFIG_VERSION})
+# message(STATUS CONFIG_GIT_HASH:: ${CONFIG_GIT_HASH})
+# message(STATUS CONFIG_OUT_PATH:: ${CONFIG_OUT_PATH})
+# message(STATUS SCRIPT_CALC_CRC:: ${SCRIPT_CALC_CRC})
+# message(STATUS CONFIG_APP_SIZE:: ${CONFIG_APP_SIZE})
+# message(STATUS TARGET_FILE:: ${TARGET_FILE})
+# message(STATUS CONFIG_APP_CRC:: ${CONFIG_APP_CRC})
+
+configure_file(${CONFIG_PATH} ${TARGET_FILE})
+
+execute_process(
+    COMMAND
+    ${CMAKE_OBJCOPY}
+    --add-section
+    .ConfData=${TARGET_FILE}
+    --set-section-flags
+    .ConfData=load,alloc
+    --set-section-alignment
+    .ConfData=4
+    --change-section-address
+    .ConfData=${CONFIG_START_ADDRESS}
+    ${TARGET_PATH} ${TARGET_PATH}
+)
+
+file(REMOVE ${TEMP_FILE_BIN})

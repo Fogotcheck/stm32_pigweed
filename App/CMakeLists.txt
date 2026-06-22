@@ -1,0 +1,62 @@
+cmake_minimum_required(VERSION 3.22)
+
+set(MODULE_NAME ${PROJECT_NAME})
+
+execute_process(
+    COMMAND git rev-parse --short HEAD
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_VSC_COMMIT
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+add_library(${MODULE_NAME}_INTERFACE INTERFACE)
+
+target_include_directories(
+    ${MODULE_NAME}_INTERFACE
+    INTERFACE
+    inc
+)
+
+add_executable(
+    ${MODULE_NAME}
+    src/main.cpp
+)
+
+target_compile_definitions(
+    ${MODULE_NAME}
+    PUBLIC
+    APP="Application"
+    PROJECT_VERSION=\"${CMAKE_PROJECT_VERSION}\"
+    PROJECT_VERSION_MAJOR=${CMAKE_PROJECT_VERSION_MAJOR}
+    PROJECT_VERSION_MINOR=${CMAKE_PROJECT_VERSION_MINOR}
+    PROJECT_VERSION_PATCH=${CMAKE_PROJECT_VERSION_PATCH}
+    PCB_VERSION="0.0"
+    PCB_VERSION_MAJOR=0
+    PCB_VERSION_MINOR=0
+    VENDOR_SPECIFIC_CODE=21
+    VSC_COMMIT=0x${GIT_VSC_COMMIT}
+)
+
+target_compile_options(
+    ${MODULE_NAME}
+    PUBLIC
+    -T${MCU_DEFAULT_LINKER_SCRIPT}
+)
+
+target_link_options(
+    ${MODULE_NAME}
+    PUBLIC
+    -T${MCU_DEFAULT_LINKER_SCRIPT}
+)
+
+target_add_core_source(${MODULE_NAME})
+
+target_link_libraries(
+    ${MODULE_NAME}
+    ${PROJECT_NAME}_INTERFACE
+    ${PROJECT_NAME}_CHIP_INTERFACE
+    ${PROJECT_NAME}_LIB_INTERFACE
+    ${PROJECT_NAME}_SERV_INTERFACE
+)
+
+target_post_build(${MODULE_NAME})
