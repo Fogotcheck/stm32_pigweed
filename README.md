@@ -1,11 +1,11 @@
-# **[Проект](https://git.fort21.ru/stm32/kalan_can)**
+# **[Проект](https://github.com/Fogotcheck/stm32_pigweed)**
 
 ## *Клонирование репозитория*
 
 Клонировать репозиторий вы можете следующим образом:
 
 ```console
-git clone "https://git.fort21.ru/stm32/kalan_can.git"
+git clone --recurse-submodules "https://github.com/Fogotcheck/stm32_pigweed.git"
 ```
 
 ## *Структура проекта*
@@ -30,6 +30,7 @@ git clone "https://git.fort21.ru/stm32/kalan_can.git"
 │
 ├── Lib
 │   ├── FreeRTOS
+│   ├── Pigweed
 │   └── logger
 │
 ├── Services
@@ -74,4 +75,4 @@ cmake --build ./build
 
 ## *Дополнительные ссылки*
 
-* [Трэкер задач](http://kaiten.fort21.lan/space/60/lists)
+* [Трэкер задач](https://github.com/Fogotcheck/stm32_pigweed/issues/new/choose)
