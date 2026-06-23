@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 set(FREERTOS_HEAP "4" CACHE STRING "" FORCE)
 set(FREERTOS_PORT "GCC_ARM_CM7" CACHE STRING "" FORCE)
+# set()
 
 add_library(freertos_config INTERFACE)
 

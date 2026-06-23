@@ -39,6 +39,7 @@ target_compile_definitions(
     "USE_HAL_DRIVER"
     HSE_STARTUP_TIMEOUT=100
     LSE_STARTUP_TIMEOUT=5000
+    USE_FLASH_ECC=0
 )
 
 target_include_directories(
