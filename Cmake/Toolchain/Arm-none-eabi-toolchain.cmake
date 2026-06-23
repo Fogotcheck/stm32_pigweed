@@ -49,6 +49,7 @@ include(${pigweed_SOURCE_DIR}/pw_sync/backend.cmake)
 include(${pigweed_SOURCE_DIR}/pw_sys_io/backend.cmake)
 include(${pigweed_SOURCE_DIR}/pw_thread/backend.cmake)
 include(${pigweed_SOURCE_DIR}/pw_interrupt/backend.cmake)
+include(${pigweed_SOURCE_DIR}/pw_unit_test/backend.cmake)
 
 # ==============================================================================
 # НАСТРОЙКА EMBEDDED-БЭКЕНДОВ PIGWEED (FREE_RTOS + СТАНДАРТНЫЙ ВЫВОД)
@@ -89,6 +90,7 @@ pw_set_backend(pw_thread.yield pw_thread_freertos.yield)
 pw_set_backend(pw_thread.sleep pw_thread_freertos.sleep)
 pw_set_backend(pw_thread.thread pw_thread_freertos.thread)
 pw_set_backend(pw_thread.creation pw_thread_freertos.thread_creation)
+pw_set_backend(pw_unit_test.main pw_unit_test.logging_main)
 
 # ==============================================================================
 # ОТКЛЮЧЕНИЕ СЛОЖНОГО ЗАКОММЕНТИРОВАННОГО МУСОРА, ВЫЗЫВАВШЕГО ВАРНИНГИ

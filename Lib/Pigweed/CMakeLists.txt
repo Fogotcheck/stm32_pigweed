@@ -18,6 +18,8 @@ target_link_libraries(${PROJECT_NAME}_PIGWEED_INTERFACE
     pw_log
     pw_containers
     pw_string
+    pw_unit_test
+    pw_unit_test.logging_main
     pw_thread_freertos.thread
     pw_thread_freertos.sleep
     pw_sync_freertos.interrupt_spin_lock
